@@ -47,11 +47,11 @@ INSERT INTO master_specialities(master_id, specialities) VALUES
 (5, 'HAIRDO'),
 (5, 'MANICURE');
 INSERT INTO appointments(id, date_time, master_id, service_id, user_id) VALUES
-(1, '2021-04-13T18:00:00', 4, 1, 1),
-(2, '2021-04-13T16:00:00', 4, 2, 3),
-(3, '2021-04-13T14:00:00', 4, 5, 2),
-(4, '2021-04-14T14:00:00', 4, 7, 1),
-(5, '2021-04-14T12:00:00', 4, 8, 3);
+(1, '2021-04-15T18:00:00', 4, 1, 1),
+(2, '2021-04-15T16:00:00', 4, 2, 3),
+(3, '2021-04-16T14:00:00', 4, 5, 2),
+(4, '2021-04-16T14:00:00', 4, 7, 1),
+(5, '2021-04-16T12:00:00', 4, 8, 3);
 INSERT INTO reviews(id, created_at, rating, text, master_id, user_id) VALUES
 (1, '2021-04-11', 5, 'very proffesional', 4, 6),
 (2, '2021-04-11', 4, 'good service', 4, 2);

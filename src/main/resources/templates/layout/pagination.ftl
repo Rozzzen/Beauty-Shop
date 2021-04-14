@@ -44,7 +44,7 @@
                 <li class="page-item disabled"><a class="page-link"><@spring.message "next"/></a></li>
             <#else>
                 <li class="page-item"><a class="page-link"
-                                         href="${url}?page=${currentPage + 1}">
+                                         href="${url}?page=${currentPage + 1}${sortText}${sort}">
                         <@spring.message "next"/></a></li>
             </#if>
         </ul>

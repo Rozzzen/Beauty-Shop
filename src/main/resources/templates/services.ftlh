@@ -5,7 +5,7 @@
     <#if alert?has_content>
         <div class="alert alert-danger" role="alert">${alert}</div></#if>
     <div class="p-5 text-center mt-3 mb-3">
-        <h1 class="mb-3">services</h1>
+        <h1 class="mb-3"><@spring.message "services"/></h1>
         <#if masters??>
             <div class="dropdown my-4 text-start">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"

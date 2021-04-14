@@ -3,7 +3,10 @@ package com.zhuk.beautyshop.service;
 import com.zhuk.beautyshop.domain.shop.Appointment;
 import com.zhuk.beautyshop.repo.AppointmentRepo;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

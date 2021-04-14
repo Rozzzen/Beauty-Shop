@@ -10,7 +10,6 @@ import com.zhuk.beautyshop.service.ClientServiceService;
 import com.zhuk.beautyshop.service.MailSender;
 import com.zhuk.beautyshop.service.MasterService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
