@@ -49,7 +49,7 @@ INSERT INTO master_specialities(master_id, specialities) VALUES
 INSERT INTO appointments(id, date_time, master_id, service_id, user_id) VALUES
 (1, '2021-04-15T18:00:00', 4, 1, 1),
 (2, '2021-04-15T16:00:00', 4, 2, 3),
-(3, '2021-04-16T14:00:00', 4, 5, 2),
+(3, '2021-04-16T16:00:00', 4, 5, 2),
 (4, '2021-04-16T14:00:00', 4, 7, 1),
 (5, '2021-04-16T12:00:00', 4, 8, 3);
 INSERT INTO reviews(id, created_at, rating, text, master_id, user_id) VALUES

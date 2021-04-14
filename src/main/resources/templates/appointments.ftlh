@@ -41,11 +41,11 @@
                                 <button name="appointmentId" value="${appointment.id}" type="submit"
                                         class="btn btn-warning"><@spring.message "cancel.appointment"/></button>
                             </form>
+                            <form action="/admin/appointments/select-timeslot" method="get">
+                                <button name="appointmentId" value="${appointment.id}" type="submit"
+                                        class="btn btn-success"><@spring.message "change.timeslot"/></button>
+                            </form>
                         </#if>
-                        <form action="/admin/appointments/select-timeslot" method="get">
-                            <button name="appointmentId" value="${appointment.id}" type="submit"
-                                    class="btn btn-success"><@spring.message "change.timeslot"/></button>
-                        </form>
                     </td>
                 </tr>
             </#list>
