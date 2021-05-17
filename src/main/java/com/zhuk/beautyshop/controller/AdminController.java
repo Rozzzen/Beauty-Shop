@@ -50,6 +50,12 @@ public class AdminController {
         model.addAttribute("page", appointmentService.findAllLocalised(locale.getLanguage(), pageable));
         model.addAttribute("url", "/admin/appointments");
         model.addAttribute("sort", "none");
+
+        String s = "asd";
+        String ss = new String("asd");
+
+        String a = "asd";
+
         return "appointments";
     }
 
