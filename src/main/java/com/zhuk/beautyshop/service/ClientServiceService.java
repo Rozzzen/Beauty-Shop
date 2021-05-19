@@ -4,6 +4,7 @@ import com.zhuk.beautyshop.domain.shop.ClientService;
 import com.zhuk.beautyshop.domain.shop.ServiceCategory;
 import com.zhuk.beautyshop.domain.user.Master;
 import com.zhuk.beautyshop.repo.ClientServiceRepo;
+import com.zhuk.beautyshop.repo.ClientServiceRepoStrategy;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
