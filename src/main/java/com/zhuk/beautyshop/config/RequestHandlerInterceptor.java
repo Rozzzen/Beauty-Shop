@@ -2,8 +2,6 @@ package com.zhuk.beautyshop.config;
 
 import com.zhuk.beautyshop.dto.RequestContext;
 import lombok.AllArgsConstructor;
-import org.hibernate.annotations.CollectionId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -18,7 +16,8 @@ public class RequestHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if(request.getHeader("JdbcTemplate") != null) requestContext.setJdbcHeaderValue(request.getHeader("JdbcTemplate"));
+        if(request.getHeader("JdbcTemplate") != null)
+            requestContext.setJdbcHeaderValue(request.getHeader("JdbcTemplate"));
         return true;
     }
 }

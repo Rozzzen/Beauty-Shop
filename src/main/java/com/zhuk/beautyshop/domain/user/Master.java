@@ -5,6 +5,7 @@ import com.zhuk.beautyshop.domain.shop.ServiceCategory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -35,11 +36,13 @@ public class Master {
     private Set<ServiceCategory> specialities;
 
     @OneToMany(mappedBy = "master")
+    @ToString.Exclude
     private List<Review> reviews;
 
     @Column(columnDefinition = "varchar(255) default 'default.jpg'")
     private String image = "default.jpg";
 
     @OneToMany(mappedBy="master", fetch = FetchType.EAGER)
+    @ToString.Exclude
     private List<Appointment> appointments;
 }

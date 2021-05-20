@@ -4,6 +4,7 @@ import com.sun.istack.NotNull;
 import com.zhuk.beautyshop.domain.shop.Appointment;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -45,6 +46,7 @@ public class User implements UserDetails {
     private UserRole role;
 
     @OneToMany(mappedBy="user")
+    @ToString.Exclude
     private List<Appointment> appointments;
 
     @Override

@@ -3,6 +3,7 @@ package com.zhuk.beautyshop.domain.shop;
 import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -37,6 +38,7 @@ public class ClientService {
     private String title;
 
     @OneToMany(mappedBy="service")
+    @ToString.Exclude
     private List<Appointment> appointments;
 
 }

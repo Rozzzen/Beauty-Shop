@@ -21,9 +21,9 @@ public class GlobalExceptionHandler {
         return "redirect:/";
     }
 
-    @ExceptionHandler(Exception.class)
-    public String handleAll(RedirectAttributes attributes) {
-        attributes.addFlashAttribute("alert", "Unexpected error occured");
-        return "redirect:/";
-    }
+//    @ExceptionHandler(Exception.class)
+//    public String handleAll(RedirectAttributes attributes) {
+//        attributes.addFlashAttribute("alert", "Unexpected error occured");
+//        return "redirect:/";
+//    }
 }
