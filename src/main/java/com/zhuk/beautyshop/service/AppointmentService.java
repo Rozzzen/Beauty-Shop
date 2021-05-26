@@ -1,6 +1,7 @@
 package com.zhuk.beautyshop.service;
 
 import com.zhuk.beautyshop.domain.shop.Appointment;
+import com.zhuk.beautyshop.exception.exceptions.AppointmentNotFoundException;
 import com.zhuk.beautyshop.repo.AppointmentRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,8 +19,8 @@ public class AppointmentService {
 
     private AppointmentRepo appointmentRepo;
 
-    public List<Appointment> findAllByDateTime(LocalDateTime dateTime) {
-        return appointmentRepo.findAllByDateTime(dateTime);
+    public List<Appointment> findAllByTimeslot(LocalDateTime dateTime) {
+        return appointmentRepo.findAllByTimeslot(dateTime);
     }
 
     public void save(Appointment appointment) {
@@ -27,7 +28,7 @@ public class AppointmentService {
     }
 
     public Appointment getOneByReviewCode(String reviewCode) {
-        return appointmentRepo.getFirstByReviewCode(reviewCode);
+        return appointmentRepo.getFirstByReviewCode(reviewCode).orElseThrow(AppointmentNotFoundException::new);
     }
 
     public Appointment getOne(Long id) {
@@ -53,6 +54,6 @@ public class AppointmentService {
     }
 
     public Appointment findById(Long id) {
-        return appointmentRepo.findFirstById(id);
+        return appointmentRepo.findFirstById(id).orElseThrow(AppointmentNotFoundException::new);
     }
 }

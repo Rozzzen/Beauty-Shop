@@ -9,9 +9,7 @@ import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.UUID;
 
 @Data
@@ -40,21 +38,13 @@ public class Appointment {
     private ClientService service;
 
     @DateTimeFormat
-    private LocalDateTime dateTime;
+    private LocalDateTime timeslot;
 
     private String reviewCode = UUID.randomUUID().toString();
-
-    @Transient
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date;
 
     @Column(columnDefinition = "boolean default false")
     private Boolean isDone = false;
 
     @Column(columnDefinition = "boolean default false")
     private Boolean isReviewed = false;
-
-    @Transient
-    @DateTimeFormat(pattern = "HH:mm")
-    private LocalTime time;
 }

@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -23,10 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@AutoConfigureMockMvc
 public class ClientServiceControllerIntegrationTest {
-
-    @MockBean
-    private RequestContext requestContext;
 
     @MockBean
     private JpaClientServiceRepo jpaClientServiceRepo;
@@ -35,59 +34,25 @@ public class ClientServiceControllerIntegrationTest {
     private JdbcClientServiceRepo jdbcClientServiceRepo;
 
     @Autowired
-    private ClientServiceController clientServiceController;
-
     private MockMvc mockMvc;
-
-    @Before
-    public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(clientServiceController).build();
-    }
 
     @Test
     public void whenHeaderExistsCallJdbcRepo() throws Exception {
-        when(requestContext.isJdbcHeaderNull()).thenReturn(false);
         mockMvc.perform(get("/services")
-                .locale(Locale.ENGLISH))
+                .locale(Locale.ENGLISH)
+                .header("JdbcTemplate", "true"))
                 .andExpect(status().isOk())
                 .andReturn();
-        verify(requestContext, times(1)).isJdbcHeaderNull();
         verify(jdbcClientServiceRepo, times(1)).findAll();
         verify(jpaClientServiceRepo, times(0)).findAll();
     }
 
     @Test
-    public void ifHeaderDoesNotExistCallJdbcRepo() throws Exception {
-        when(requestContext.isJdbcHeaderNull()).thenReturn(false);
-        mockMvc.perform(get("/services/{master}", 1)
-                .locale(Locale.ENGLISH))
-                .andExpect(status().isOk())
-                .andReturn();
-        verify(requestContext, times(1)).isJdbcHeaderNull();
-        verify(jdbcClientServiceRepo, times(1)).findAllByCategoryIn(Mockito.anyList());
-        verify(jpaClientServiceRepo, times(0)).findAllByCategoryIn(Mockito.anyList());
-    }
-
-    @Test
-    public void ifHeaderDoesNotExistCallJpaRepo() throws Exception {
-        when(requestContext.isJdbcHeaderNull()).thenReturn(true);
-        mockMvc.perform(get("/services/{master}", 1)
-                .locale(Locale.ENGLISH))
-                .andExpect(status().isOk())
-                .andReturn();
-        verify(requestContext, times(1)).isJdbcHeaderNull();
-        verify(jdbcClientServiceRepo, times(0)).findAllByCategoryIn(Mockito.anyList());
-        verify(jpaClientServiceRepo, times(1)).findAllByCategoryIn(Mockito.anyList());
-    }
-
-    @Test
     public void whenHeaderDoesNotExistCallJpaRepo() throws Exception {
-        when(requestContext.isJdbcHeaderNull()).thenReturn(true);
         mockMvc.perform(get("/services")
                 .locale(Locale.ENGLISH))
                 .andExpect(status().isOk())
                 .andReturn();
-        verify(requestContext, times(1)).isJdbcHeaderNull();
         verify(jdbcClientServiceRepo, times(0)).findAll();
         verify(jpaClientServiceRepo, times(1)).findAll();
     }

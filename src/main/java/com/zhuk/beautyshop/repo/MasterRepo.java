@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Repository
 public interface MasterRepo extends JpaRepository<Master, Long> {
@@ -17,7 +18,7 @@ public interface MasterRepo extends JpaRepository<Master, Long> {
 
     Page<Master> findAllByUserInfoIsNot(User userInfo, Pageable pageable);
 
-    Master findFirstById(Long id);
+    Optional<Master> findFirstById(Long id);
 
     Page<Master> findAllByUserInfoIsNotAndSpecialitiesContaining(User userInfo, ServiceCategory serviceCategory, Pageable pageable);
 
@@ -31,7 +32,7 @@ public interface MasterRepo extends JpaRepository<Master, Long> {
 
     Page<Master> findAllByIdNotInAndSpecialitiesContaining(Collection<Long> id, ServiceCategory specialities, Pageable pageable);
 
-    Master getFirstByUserInfoId(Long userInfo_id);
+    Optional<Master> getFirstByUserInfoId(Long userInfo_id);
 
-    Master findFirstByUserInfoEmail(String userInfo_email);
+    Optional<Master> findFirstByUserInfoEmail(String userInfo_email);
 }

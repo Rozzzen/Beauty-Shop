@@ -6,15 +6,16 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
 
-    List<Appointment> findAllByDateTime(LocalDateTime dateTime);
+    List<Appointment> findAllByTimeslot(LocalDateTime dateTime);
 
-    Appointment getFirstByReviewCode(String reviewCode);
+    Optional<Appointment> getFirstByReviewCode(String reviewCode);
 
     void deleteById(Long id);
 
-    Appointment findFirstById(Long id);
+    Optional<Appointment> findFirstById(Long id);
 }

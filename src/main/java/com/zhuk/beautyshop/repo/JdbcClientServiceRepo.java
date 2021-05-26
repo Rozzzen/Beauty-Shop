@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -36,7 +37,7 @@ public class JdbcClientServiceRepo implements ClientServiceRepo {
     }
 
     @Override
-    public ClientService findFirstById(Long id) {
+    public Optional<ClientService> findFirstById(Long id) {
         return null;
     }
 }

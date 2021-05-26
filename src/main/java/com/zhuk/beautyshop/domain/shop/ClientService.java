@@ -1,5 +1,6 @@
 package com.zhuk.beautyshop.domain.shop;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,7 @@ public class ClientService {
 
     @OneToMany(mappedBy="service")
     @ToString.Exclude
+    @JsonIgnore
     private List<Appointment> appointments;
 
 }

@@ -3,6 +3,7 @@ package com.zhuk.beautyshop.service;
 import com.zhuk.beautyshop.domain.shop.ServiceCategory;
 import com.zhuk.beautyshop.domain.user.Master;
 import com.zhuk.beautyshop.domain.user.User;
+import com.zhuk.beautyshop.exception.exceptions.MasterNotFoundException;
 import com.zhuk.beautyshop.repo.MasterRepo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -80,11 +81,11 @@ public class MasterService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Master findFirstById(Long id) {
-        return masterRepo.findFirstById(id);
+        return masterRepo.findFirstById(id).orElseThrow(MasterNotFoundException::new);
     }
 
     public Master getFirstByUserInfoId(Long id) {
-        return masterRepo.getFirstByUserInfoId(id);
+        return masterRepo.getFirstByUserInfoId(id).orElseThrow(MasterNotFoundException::new);
     }
 
     public void save(Master master) {
@@ -92,7 +93,7 @@ public class MasterService {
     }
 
     public Master findByEmail(String email) {
-        return masterRepo.findFirstByUserInfoEmail(email);
+        return masterRepo.findFirstByUserInfoEmail(email).orElseThrow(MasterNotFoundException::new);
     }
 
     public void updateMasterImage(MultipartFile file, Master master) throws IOException {

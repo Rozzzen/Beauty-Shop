@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Primary
@@ -36,7 +37,7 @@ public class ClientServiceRepoStrategy implements ClientServiceRepo {
         return jpaClientServiceRepo.findAllByCategoryIn(category);
     }
 
-    public ClientService findFirstById(Long id) {
+    public Optional<ClientService> findFirstById(Long id) {
         return jpaClientServiceRepo.findFirstById(id);
     }
 }
