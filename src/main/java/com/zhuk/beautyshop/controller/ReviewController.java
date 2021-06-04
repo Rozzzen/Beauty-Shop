@@ -1,12 +1,13 @@
 package com.zhuk.beautyshop.controller;
 
-import com.zhuk.beautyshop.domain.shop.Appointment;
-import com.zhuk.beautyshop.domain.user.MasterRating;
-import com.zhuk.beautyshop.domain.user.Review;
+import com.zhuk.beautyshop.domain.Appointment;
+import com.zhuk.beautyshop.domain.MasterRating;
+import com.zhuk.beautyshop.domain.Review;
 import com.zhuk.beautyshop.service.AppointmentService;
 import com.zhuk.beautyshop.service.MasterRatingService;
 import com.zhuk.beautyshop.service.ReviewService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/review/{code}")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ReviewController {
 
     private final AppointmentService appointmentService;

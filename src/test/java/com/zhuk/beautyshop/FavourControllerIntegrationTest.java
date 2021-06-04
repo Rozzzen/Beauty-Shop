@@ -1,20 +1,15 @@
 package com.zhuk.beautyshop;
 
-import com.zhuk.beautyshop.controller.ClientServiceController;
-import com.zhuk.beautyshop.dto.RequestContext;
-import com.zhuk.beautyshop.repo.JdbcClientServiceRepo;
-import com.zhuk.beautyshop.repo.JpaClientServiceRepo;
-import org.junit.Before;
+import com.zhuk.beautyshop.repo.JdbcFavourRepo;
+import com.zhuk.beautyshop.repo.JpaFavourRepo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Locale;
 
@@ -25,13 +20,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ClientServiceControllerIntegrationTest {
+public class FavourControllerIntegrationTest {
 
     @MockBean
-    private JpaClientServiceRepo jpaClientServiceRepo;
+    private JpaFavourRepo jpaClientServiceRepo;
 
     @MockBean
-    private JdbcClientServiceRepo jdbcClientServiceRepo;
+    private JdbcFavourRepo jdbcClientServiceRepo;
 
     @Autowired
     private MockMvc mockMvc;
@@ -43,8 +38,8 @@ public class ClientServiceControllerIntegrationTest {
                 .header("JdbcTemplate", "true"))
                 .andExpect(status().isOk())
                 .andReturn();
-        verify(jdbcClientServiceRepo, times(1)).findAll();
-        verify(jpaClientServiceRepo, times(0)).findAll();
+        verify(jdbcClientServiceRepo, times(1)).findAllByLanguage(Locale.ENGLISH.getLanguage());
+        verify(jpaClientServiceRepo, times(0)).findAllByLanguage(Locale.ENGLISH.getLanguage());
     }
 
     @Test
@@ -53,7 +48,7 @@ public class ClientServiceControllerIntegrationTest {
                 .locale(Locale.ENGLISH))
                 .andExpect(status().isOk())
                 .andReturn();
-        verify(jdbcClientServiceRepo, times(0)).findAll();
-        verify(jpaClientServiceRepo, times(1)).findAll();
+        verify(jdbcClientServiceRepo, times(0)).findAllByLanguage(Locale.ENGLISH.getLanguage());
+        verify(jpaClientServiceRepo, times(1)).findAllByLanguage(Locale.ENGLISH.getLanguage());
     }
 }

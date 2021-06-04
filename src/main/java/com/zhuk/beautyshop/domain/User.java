@@ -1,7 +1,6 @@
-package com.zhuk.beautyshop.domain.user;
+package com.zhuk.beautyshop.domain;
 
 import com.sun.istack.NotNull;
-import com.zhuk.beautyshop.domain.shop.Appointment;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;

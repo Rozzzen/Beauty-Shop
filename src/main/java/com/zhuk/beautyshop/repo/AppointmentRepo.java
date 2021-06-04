@@ -1,6 +1,7 @@
 package com.zhuk.beautyshop.repo;
 
-import com.zhuk.beautyshop.domain.shop.Appointment;
+import com.zhuk.beautyshop.domain.Appointment;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +19,6 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
     void deleteById(Long id);
 
     Optional<Appointment> findFirstById(Long id);
+
+    List<Appointment> findAllByFavourTranslationLanguage(String language, Sort sort);
 }

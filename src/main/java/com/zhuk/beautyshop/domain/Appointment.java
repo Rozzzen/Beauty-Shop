@@ -1,7 +1,5 @@
-package com.zhuk.beautyshop.domain.shop;
+package com.zhuk.beautyshop.domain;
 
-import com.zhuk.beautyshop.domain.user.Master;
-import com.zhuk.beautyshop.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,8 +32,9 @@ public class Appointment {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name="service_id", nullable=false)
-    private ClientService service;
+    @JoinColumn(name="favour_id", nullable=false)
+    private FavourTranslation favourTranslation;
+    //TODO how to resolve this
 
     @DateTimeFormat
     private LocalDateTime timeslot;

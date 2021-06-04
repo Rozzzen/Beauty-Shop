@@ -1,6 +1,6 @@
 package com.zhuk.beautyshop.repo;
 
-import com.zhuk.beautyshop.domain.user.Review;
+import com.zhuk.beautyshop.domain.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

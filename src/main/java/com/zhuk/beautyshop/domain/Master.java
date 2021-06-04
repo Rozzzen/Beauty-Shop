@@ -1,7 +1,5 @@
-package com.zhuk.beautyshop.domain.user;
+package com.zhuk.beautyshop.domain;
 
-import com.zhuk.beautyshop.domain.shop.Appointment;
-import com.zhuk.beautyshop.domain.shop.ServiceCategory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,10 +28,10 @@ public class Master {
     @JoinColumn(name = "rating_id", referencedColumnName = "id")
     private MasterRating rating;
 
-    @ElementCollection(targetClass = ServiceCategory.class, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = FavourCategory.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "master_specialities", joinColumns = @JoinColumn(name = "master_id"))
     @Enumerated(EnumType.STRING)
-    private Set<ServiceCategory> specialities;
+    private Set<FavourCategory> specialities;
 
     @OneToMany(mappedBy = "master")
     @ToString.Exclude

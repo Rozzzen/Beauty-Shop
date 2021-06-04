@@ -1,15 +1,16 @@
 package com.zhuk.beautyshop.service;
 
-import com.zhuk.beautyshop.domain.user.MasterRating;
+import com.zhuk.beautyshop.domain.MasterRating;
 import com.zhuk.beautyshop.repo.MasterRatingRepo;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MasterRatingService {
 
-    MasterRatingRepo masterRatingRepo;
+    private final MasterRatingRepo masterRatingRepo;
 
     public MasterRating getOne(Long id) {
         return masterRatingRepo.getOne(id);

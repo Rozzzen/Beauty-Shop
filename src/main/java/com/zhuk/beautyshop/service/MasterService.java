@@ -1,10 +1,11 @@
 package com.zhuk.beautyshop.service;
 
-import com.zhuk.beautyshop.domain.shop.ServiceCategory;
-import com.zhuk.beautyshop.domain.user.Master;
-import com.zhuk.beautyshop.domain.user.User;
+import com.zhuk.beautyshop.domain.FavourCategory;
+import com.zhuk.beautyshop.domain.Master;
+import com.zhuk.beautyshop.domain.User;
 import com.zhuk.beautyshop.exception.exceptions.MasterNotFoundException;
 import com.zhuk.beautyshop.repo.MasterRepo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,20 +17,16 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class MasterService {
 
     @Value("${upload.path}")
     private String uploadPath;
 
-    private MasterRepo masterRepo;
-
-    public MasterService(MasterRepo masterRepo) {
-        this.masterRepo = masterRepo;
-    }
+    private final MasterRepo masterRepo;
 
     public Page<Master> findAll(User userInfo, Pageable pageable) {
         if (userInfo == null) {
@@ -39,15 +36,11 @@ public class MasterService {
     }
 
     public Page<Master> findAllBySpecialitiesContaining(User userInfo, String category, Pageable pageable) {
-        ServiceCategory serviceCategory = ServiceCategory.valueOf(category);
+        FavourCategory favourCategory = FavourCategory.valueOf(category);
         if (userInfo == null) {
-            return masterRepo.findAllBySpecialitiesContaining(serviceCategory, pageable);
+            return masterRepo.findAllBySpecialitiesContaining(favourCategory, pageable);
         }
-        return masterRepo.findAllByUserInfoIsNotAndSpecialitiesContaining(userInfo, serviceCategory, pageable);
-    }
-
-    public List<Master> findAll() {
-        return masterRepo.findAll();
+        return masterRepo.findAllByUserInfoIsNotAndSpecialitiesContaining(userInfo, favourCategory, pageable);
     }
 
     public Page<Master> findAllByIdNotIn(User userInfo, Collection<Long> id, Pageable pageable) {
@@ -65,27 +58,29 @@ public class MasterService {
     }
 
     public Page<Master> findAllByIdNotInAndSpecialitiesContaining(Collection<Long> id, User userInfo, String category, Pageable pageable) {
-        ServiceCategory serviceCategory = ServiceCategory.valueOf(category);
+        FavourCategory favourCategory = FavourCategory.valueOf(category);
         if (userInfo == null) {
             if (id.isEmpty()) {
-                return masterRepo.findAllBySpecialitiesContaining(serviceCategory, pageable);
+                return masterRepo.findAllBySpecialitiesContaining(favourCategory, pageable);
             }
-            return masterRepo.findAllByIdNotInAndSpecialitiesContaining(id, serviceCategory, pageable);
+            return masterRepo.findAllByIdNotInAndSpecialitiesContaining(id, favourCategory, pageable);
         } else {
             if (id.isEmpty()) {
-                return masterRepo.findAllByUserInfoIsNotAndSpecialitiesContaining(userInfo, serviceCategory, pageable);
+                return masterRepo.findAllByUserInfoIsNotAndSpecialitiesContaining(userInfo, favourCategory, pageable);
             }
-            return masterRepo.findAllByUserInfoIsNotAndIdNotInAndSpecialitiesContaining(userInfo, id, serviceCategory, pageable);
+            return masterRepo.findAllByUserInfoIsNotAndIdNotInAndSpecialitiesContaining(userInfo, id, favourCategory, pageable);
         }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Master findFirstById(Long id) {
-        return masterRepo.findFirstById(id).orElseThrow(MasterNotFoundException::new);
+        return masterRepo.findFirstById(id)
+                .orElseThrow(() -> new MasterNotFoundException("failed to find master with id:" + id));
     }
 
     public Master getFirstByUserInfoId(Long id) {
-        return masterRepo.getFirstByUserInfoId(id).orElseThrow(MasterNotFoundException::new);
+        return masterRepo.getFirstByUserInfoId(id)
+                .orElseThrow(() -> new MasterNotFoundException("failed to find master with id:" + id));
     }
 
     public void save(Master master) {
@@ -93,7 +88,8 @@ public class MasterService {
     }
 
     public Master findByEmail(String email) {
-        return masterRepo.findFirstByUserInfoEmail(email).orElseThrow(MasterNotFoundException::new);
+        return masterRepo.findFirstByUserInfoEmail(email)
+                .orElseThrow(() -> new MasterNotFoundException("failed to find master with email:" + email));
     }
 
     public void updateMasterImage(MultipartFile file, Master master) throws IOException {

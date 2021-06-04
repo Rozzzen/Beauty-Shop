@@ -1,13 +1,9 @@
 package com.zhuk.beautyshop.controller;
 
-import com.zhuk.beautyshop.domain.shop.Appointment;
-import com.zhuk.beautyshop.domain.shop.ClientService;
-import com.zhuk.beautyshop.domain.shop.ServiceCategory;
-import com.zhuk.beautyshop.domain.user.CreditCard;
-import com.zhuk.beautyshop.domain.user.Master;
-import com.zhuk.beautyshop.domain.user.User;
+import com.zhuk.beautyshop.domain.*;
+import com.zhuk.beautyshop.dto.FavourDto;
 import com.zhuk.beautyshop.service.AppointmentService;
-import com.zhuk.beautyshop.service.ClientServiceService;
+import com.zhuk.beautyshop.service.FavourService;
 import com.zhuk.beautyshop.service.MailSender;
 import com.zhuk.beautyshop.service.MasterService;
 import lombok.AllArgsConstructor;
@@ -36,7 +32,7 @@ import java.util.stream.Collectors;
 public class OrderController {
 
     private final MasterService masterService;
-    private final ClientServiceService clientServiceService;
+    private final FavourService favourService;
     private final AppointmentService appointmentService;
     private final MailSender mailSender;
 
@@ -50,33 +46,33 @@ public class OrderController {
                                                @RequestParam(name = "serviceId", required = false) Long serviceId,
                                                @ModelAttribute("appointment") Appointment appointment,
                                                Locale locale) {
-        if (appointment.getMaster() == null && appointment.getService() == null && appointment.getTimeslot() == null) {
+        if (appointment.getMaster() == null && appointment.getFavourTranslation() == null && appointment.getTimeslot() == null) {
             if (serviceId != null)
-                appointment.setService(clientServiceService.findFirstById(serviceId, locale.getLanguage()));
+                appointment.setFavourTranslation(favourService.findFirstEntityById(serviceId, locale.getLanguage()));
             else if (masterId != null) appointment.setMaster(masterService.findFirstById(masterId));
         }
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/services")
-    public ResponseEntity<Map<ServiceCategory, List<ClientService>>> getServices(@ModelAttribute("appointment") Appointment appointment,
-                                                                                 Locale locale) {
+    public ResponseEntity<Map<FavourCategory, List<FavourDto>>> getServices(@ModelAttribute("appointment") Appointment appointment,
+                                                                            Locale locale) {
         if (appointment.getMaster() == null)
-            return ResponseEntity.ok(clientServiceService.findAllByLanguageAndCategory(locale.getLanguage()));
-        return ResponseEntity.ok(clientServiceService.findAllByMasterSpecialities(locale.getLanguage(), appointment.getMaster()));
+            return ResponseEntity.ok(favourService.findAllByLanguageAndCategory(locale.getLanguage()));
+        return ResponseEntity.ok(favourService.findAllByMasterSpecialities(locale.getLanguage(), appointment.getMaster()));
     }
 
     @PatchMapping("/services")
     public ResponseEntity<Object> putService(@RequestParam(name = "serviceId") Long serviceId,
                                              @ModelAttribute("appointment") Appointment appointment,
                                              Locale locale) {
-        appointment.setService(clientServiceService.findFirstById(serviceId, locale.getLanguage()));
+        appointment.setFavourTranslation(favourService.findFirstEntityById(serviceId, locale.getLanguage()));
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/services")
     public ResponseEntity<Object> deleteService(@ModelAttribute("appointment") Appointment appointment) {
-        appointment.setService(null);
+        appointment.setFavourTranslation(null);
         return ResponseEntity.ok().build();
     }
 
@@ -93,7 +89,7 @@ public class OrderController {
         Pageable pageable = PageRequest.of(page, 3, Sort.by(sort).descending());
 
         LocalDateTime localDateTime = appointment.getTimeslot();
-        ClientService clientService = appointment.getService();
+        FavourTranslation favour = appointment.getFavourTranslation();
 
         if (localDateTime != null) {
             List<Appointment> appointmentList = appointmentService.findAllByTimeslot(localDateTime);
@@ -101,17 +97,17 @@ public class OrderController {
                     .stream()
                     .map(x -> x.getMaster().getId())
                     .collect(Collectors.toSet());
-            if (clientService == null)
+            if (favour == null)
                 return ResponseEntity.ok(masterService.findAllByIdNotIn(user, masterIdList, pageable));
             else {
-                String speciality = clientService.getCategory().name().toUpperCase();
+                String speciality = favour.getFavour().getCategory().name().toUpperCase();
                 return ResponseEntity.ok(masterService.findAllByIdNotInAndSpecialitiesContaining(masterIdList, user, speciality, pageable));
             }
         } else {
-            if (clientService == null)
+            if (favour == null)
                 return ResponseEntity.ok(masterService.findAll(user, pageable));
             else {
-                String speciality = clientService.getCategory().name().toUpperCase();
+                String speciality = favour.getFavour().getCategory().name().toUpperCase();
                 return ResponseEntity.ok(masterService.findAllBySpecialitiesContaining(user, speciality, pageable));
             }
         }

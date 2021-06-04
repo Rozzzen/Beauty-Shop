@@ -1,14 +1,13 @@
 package com.zhuk.beautyshop.exception.handler;
 
 import com.zhuk.beautyshop.exception.exceptions.AppointmentNotFoundException;
-import com.zhuk.beautyshop.exception.exceptions.ClientServiceNotFoundException;
+import com.zhuk.beautyshop.exception.exceptions.FavourNotFoundException;
 import com.zhuk.beautyshop.exception.exceptions.MasterNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
@@ -20,11 +19,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("Access denied exception");
     }
 
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<Object> pageNotFoundException() {
-        return ResponseEntity.notFound().build();
-    }
-
     @ExceptionHandler(AppointmentNotFoundException.class)
     public ResponseEntity<ExceptionResponse> appointmentNotFoundException(AppointmentNotFoundException ex) {
 
@@ -33,8 +27,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(exceptionResponse);
     }
 
-    @ExceptionHandler(ClientServiceNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> appointmentNotFoundException(ClientServiceNotFoundException ex) {
+    @ExceptionHandler(FavourNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> appointmentNotFoundException(FavourNotFoundException ex) {
 
         ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage());
         log.info(ex.getMessage());

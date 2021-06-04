@@ -1,6 +1,7 @@
 package com.zhuk.beautyshop.service;
 
-import com.zhuk.beautyshop.domain.shop.Appointment;
+import com.zhuk.beautyshop.domain.Appointment;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -14,6 +15,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 @Service
+@RequiredArgsConstructor
 public class MailSender {
 
     @Value("${spring.mail.username}")
@@ -21,12 +23,7 @@ public class MailSender {
     @Value("${application.timezone}")
     private String timezone;
 
-    private JavaMailSender mailSender;
-
-    @Autowired
-    public MailSender(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
+    private final JavaMailSender mailSender;
 
     public void send(String emailTo, String subject, String text) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();

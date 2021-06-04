@@ -1,10 +1,10 @@
 package com.zhuk.beautyshop.controller;
 
-import com.zhuk.beautyshop.domain.shop.Appointment;
-import com.zhuk.beautyshop.domain.shop.ServiceCategory;
-import com.zhuk.beautyshop.domain.user.Master;
-import com.zhuk.beautyshop.domain.user.MasterRating;
-import com.zhuk.beautyshop.domain.user.User;
+import com.zhuk.beautyshop.domain.Appointment;
+import com.zhuk.beautyshop.domain.FavourCategory;
+import com.zhuk.beautyshop.domain.Master;
+import com.zhuk.beautyshop.domain.MasterRating;
+import com.zhuk.beautyshop.domain.User;
 import com.zhuk.beautyshop.service.AppointmentService;
 import com.zhuk.beautyshop.service.MasterService;
 import com.zhuk.beautyshop.service.UserService;
@@ -58,8 +58,8 @@ public class AdminController {
                                                          @RequestParam(value = "pedicure", required = false) String pedicure,
                                                          @RequestParam(value = "makeup", required = false) String makeup) {
         User user = userService.findByEmail(email);
-        Set<ServiceCategory> serviceCategories =
-                Stream.of(hairdo, makeup, pedicure, manicure).filter(Objects::nonNull).map(x -> ServiceCategory.valueOf(x.toUpperCase())).collect(Collectors.toSet());
+        Set<FavourCategory> serviceCategories =
+                Stream.of(hairdo, makeup, pedicure, manicure).filter(Objects::nonNull).map(x -> FavourCategory.valueOf(x.toUpperCase())).collect(Collectors.toSet());
 
         if (serviceCategories.isEmpty() && user == null && masterService.findByEmail(email) != null) {
             return ResponseEntity.badRequest().build();
