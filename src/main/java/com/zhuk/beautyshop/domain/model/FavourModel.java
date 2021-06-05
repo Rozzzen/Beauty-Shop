@@ -1,4 +1,4 @@
-package com.zhuk.beautyshop.dto;
+package com.zhuk.beautyshop.domain.model;
 
 import com.zhuk.beautyshop.domain.entity.FavourCategory;
 import lombok.AllArgsConstructor;
@@ -7,13 +7,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class FavourDto {
+public class FavourModel {
     private Long id;
     private Double price;
     private FavourCategory category;
-    private String title;
-    private String language;
+//    private List<AppointmentModel> appointments;
 }

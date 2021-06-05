@@ -1,7 +1,7 @@
 package com.zhuk.beautyshop.repo;
 
-import com.zhuk.beautyshop.domain.FavourTranslation;
-import com.zhuk.beautyshop.domain.FavourCategory;
+import com.zhuk.beautyshop.domain.entity.FavourCategory;
+import com.zhuk.beautyshop.domain.model.FavourTranslationModel;
 import com.zhuk.beautyshop.dto.RequestContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -17,23 +17,23 @@ public class FavourRepoStrategy implements FavourRepo {
 
     private final JdbcFavourRepo jdbcClientServiceRepo;
     private final RequestContext requestContext;
-    private final JpaFavourRepo jpaClientServiceRepo;
+    private final JpaFavourRepoWrapper jpaFavourRepoWrapper;
 
-    public List<FavourTranslation> findAllByLanguage(String language) {
+    public List<FavourTranslationModel> findAllByLanguage(String language) {
         if(!requestContext.isJdbcHeaderNull())
             return jdbcClientServiceRepo.findAllByLanguage(language);
-        return jpaClientServiceRepo.findAllByLanguage(language);
+        return jpaFavourRepoWrapper.findAllByLanguage(language);
     }
 
-    public List<FavourTranslation> findAllByFavourCategoryInAndLanguage(List<FavourCategory> category, String language) {
+    public List<FavourTranslationModel> findAllByFavourCategoryInAndLanguage(List<FavourCategory> category, String language) {
         if(!requestContext.isJdbcHeaderNull())
             return jdbcClientServiceRepo.findAllByFavourCategoryInAndLanguage(category, language);
-        return jpaClientServiceRepo.findAllByFavourCategoryInAndLanguage(category, language);
+        return jpaFavourRepoWrapper.findAllByFavourCategoryInAndLanguage(category, language);
     }
 
-    public Optional<FavourTranslation> findByFavourIdAndLanguage(Long id, String language) {
+    public Optional<FavourTranslationModel> findByFavourIdAndLanguage(Long id, String language) {
         if(!requestContext.isJdbcHeaderNull())
             return jdbcClientServiceRepo.findByFavourIdAndLanguage(id, language);
-        return jpaClientServiceRepo.findByFavourIdAndLanguage(id, language);
+        return jpaFavourRepoWrapper.findByFavourIdAndLanguage(id, language);
     }
 }

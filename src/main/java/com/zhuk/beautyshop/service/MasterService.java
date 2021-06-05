@@ -1,8 +1,8 @@
 package com.zhuk.beautyshop.service;
 
-import com.zhuk.beautyshop.domain.FavourCategory;
-import com.zhuk.beautyshop.domain.Master;
-import com.zhuk.beautyshop.domain.User;
+import com.zhuk.beautyshop.domain.entity.FavourCategory;
+import com.zhuk.beautyshop.domain.entity.Master;
+import com.zhuk.beautyshop.domain.entity.User;
 import com.zhuk.beautyshop.exception.exceptions.MasterNotFoundException;
 import com.zhuk.beautyshop.repo.MasterRepo;
 import lombok.RequiredArgsConstructor;

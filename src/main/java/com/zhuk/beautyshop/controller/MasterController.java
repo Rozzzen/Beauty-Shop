@@ -1,8 +1,8 @@
 package com.zhuk.beautyshop.controller;
 
-import com.zhuk.beautyshop.domain.Appointment;
-import com.zhuk.beautyshop.domain.Master;
-import com.zhuk.beautyshop.domain.User;
+import com.zhuk.beautyshop.domain.entity.Appointment;
+import com.zhuk.beautyshop.domain.entity.Master;
+import com.zhuk.beautyshop.domain.entity.User;
 import com.zhuk.beautyshop.service.AppointmentService;
 import com.zhuk.beautyshop.service.MasterService;
 import lombok.RequiredArgsConstructor;

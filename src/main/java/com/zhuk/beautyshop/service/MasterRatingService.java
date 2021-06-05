@@ -1,8 +1,7 @@
 package com.zhuk.beautyshop.service;
 
-import com.zhuk.beautyshop.domain.MasterRating;
+import com.zhuk.beautyshop.domain.entity.MasterRating;
 import com.zhuk.beautyshop.repo.MasterRatingRepo;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

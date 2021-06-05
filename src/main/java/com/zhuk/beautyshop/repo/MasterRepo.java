@@ -1,8 +1,8 @@
 package com.zhuk.beautyshop.repo;
 
-import com.zhuk.beautyshop.domain.FavourCategory;
-import com.zhuk.beautyshop.domain.Master;
-import com.zhuk.beautyshop.domain.User;
+import com.zhuk.beautyshop.domain.entity.FavourCategory;
+import com.zhuk.beautyshop.domain.entity.Master;
+import com.zhuk.beautyshop.domain.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

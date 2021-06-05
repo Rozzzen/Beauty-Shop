@@ -1,12 +1,11 @@
 package com.zhuk.beautyshop.controller;
 
-import com.zhuk.beautyshop.domain.Appointment;
-import com.zhuk.beautyshop.domain.MasterRating;
-import com.zhuk.beautyshop.domain.Review;
+import com.zhuk.beautyshop.domain.entity.Appointment;
+import com.zhuk.beautyshop.domain.entity.MasterRating;
+import com.zhuk.beautyshop.domain.entity.Review;
 import com.zhuk.beautyshop.service.AppointmentService;
 import com.zhuk.beautyshop.service.MasterRatingService;
 import com.zhuk.beautyshop.service.ReviewService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;

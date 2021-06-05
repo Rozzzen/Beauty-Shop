@@ -1,6 +1,6 @@
 package com.zhuk.beautyshop.repo;
 
-import com.zhuk.beautyshop.domain.Appointment;
+import com.zhuk.beautyshop.domain.entity.Appointment;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

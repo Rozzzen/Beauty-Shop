@@ -1,10 +1,8 @@
 package com.zhuk.beautyshop.service;
 
-import com.zhuk.beautyshop.domain.Appointment;
+import com.zhuk.beautyshop.domain.entity.Appointment;
 import com.zhuk.beautyshop.exception.exceptions.AppointmentNotFoundException;
-import com.zhuk.beautyshop.exception.exceptions.FavourNotFoundException;
 import com.zhuk.beautyshop.repo.AppointmentRepo;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

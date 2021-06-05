@@ -1,10 +1,8 @@
 package com.zhuk.beautyshop.repo;
 
-import com.zhuk.beautyshop.domain.Favour;
-import com.zhuk.beautyshop.domain.FavourTranslation;
-import com.zhuk.beautyshop.domain.FavourCategory;
-import com.zhuk.beautyshop.repo.mapper.FavourTranslationRowMapper;
-import lombok.AllArgsConstructor;
+import com.zhuk.beautyshop.domain.entity.FavourCategory;
+import com.zhuk.beautyshop.domain.model.FavourTranslationModel;
+import com.zhuk.beautyshop.repo.mapper.FavourTranslationModelRowMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -21,15 +19,15 @@ import java.util.Optional;
 public class JdbcFavourRepo implements FavourRepo {
 
     private final JdbcTemplate jdbcTemplate;
-    private final FavourTranslationRowMapper favourTranslationRowMapper;
+    private final FavourTranslationModelRowMapper favourTranslationModelRowMapper;
 
     @Override
-    public List<FavourTranslation> findAllByLanguage(String language) {
-        return jdbcTemplate.query("SELECT * FROM favours", new BeanPropertyRowMapper<>(FavourTranslation.class));
+    public List<FavourTranslationModel> findAllByLanguage(String language) {
+        return jdbcTemplate.query("SELECT * FROM favours", new BeanPropertyRowMapper<>(FavourTranslationModel.class));
     }
 
     @Override
-    public List<FavourTranslation> findAllByFavourCategoryInAndLanguage(List<FavourCategory> category, String language) {
+    public List<FavourTranslationModel> findAllByFavourCategoryInAndLanguage(List<FavourCategory> category, String language) {
 
         String inSql = String.join(",", Collections.nCopies(category.size(), "?"));
         String sql = String.format("SELECT * FROM favour_translation ft\n" +
@@ -41,14 +39,14 @@ public class JdbcFavourRepo implements FavourRepo {
         for (int i = 0; i < category.size(); i++)
             strings[i] = category.get(i).name();
 
-        return jdbcTemplate.query(sql, strings, favourTranslationRowMapper);
+        return jdbcTemplate.query(sql, strings, favourTranslationModelRowMapper);
     }
 
     @Override
-    public Optional<FavourTranslation> findByFavourIdAndLanguage(Long id, String language) {
+    public Optional<FavourTranslationModel> findByFavourIdAndLanguage(Long id, String language) {
         return jdbcTemplate.query("SELECT * FROM favour_translation ft\n" +
                 "JOIN favours f on f.id = ft.favour_id\n" +
-                "WHERE f.id = ? AND ft.language = ?", new Object[] { id, language }, favourTranslationRowMapper)
+                "WHERE f.id = ? AND ft.language = ?", new Object[] { id, language }, favourTranslationModelRowMapper)
                 .stream().findFirst();
     }
 }

@@ -1,6 +1,6 @@
 package com.zhuk.beautyshop.controller;
 
-import com.zhuk.beautyshop.domain.*;
+import com.zhuk.beautyshop.domain.entity.*;
 import com.zhuk.beautyshop.dto.FavourDto;
 import com.zhuk.beautyshop.service.AppointmentService;
 import com.zhuk.beautyshop.service.FavourService;
@@ -47,9 +47,9 @@ public class OrderController {
                                                @ModelAttribute("appointment") Appointment appointment,
                                                Locale locale) {
         if (appointment.getMaster() == null && appointment.getFavourTranslation() == null && appointment.getTimeslot() == null) {
-            if (serviceId != null)
-                appointment.setFavourTranslation(favourService.findFirstEntityById(serviceId, locale.getLanguage()));
-            else if (masterId != null) appointment.setMaster(masterService.findFirstById(masterId));
+//            if (serviceId != null)
+//                appointment.setFavourTranslation(favourService.findFirstEntityById(serviceId, locale.getLanguage()));
+//            else if (masterId != null) appointment.setMaster(masterService.findFirstById(masterId));
         }
         return ResponseEntity.ok().build();
     }
@@ -57,16 +57,17 @@ public class OrderController {
     @GetMapping("/services")
     public ResponseEntity<Map<FavourCategory, List<FavourDto>>> getServices(@ModelAttribute("appointment") Appointment appointment,
                                                                             Locale locale) {
-        if (appointment.getMaster() == null)
-            return ResponseEntity.ok(favourService.findAllByLanguageAndCategory(locale.getLanguage()));
-        return ResponseEntity.ok(favourService.findAllByMasterSpecialities(locale.getLanguage(), appointment.getMaster()));
+//        if (appointment.getMaster() == null)
+//            return ResponseEntity.ok(favourService.findAllByLanguageAndCategory(locale.getLanguage()));
+//        return ResponseEntity.ok(favourService.findAllByMasterSpecialities(locale.getLanguage(), appointment.getMaster()));
+        return null;
     }
 
     @PatchMapping("/services")
     public ResponseEntity<Object> putService(@RequestParam(name = "serviceId") Long serviceId,
                                              @ModelAttribute("appointment") Appointment appointment,
                                              Locale locale) {
-        appointment.setFavourTranslation(favourService.findFirstEntityById(serviceId, locale.getLanguage()));
+//        appointment.setFavourTranslation(favourService.findFirstEntityById(serviceId, locale.getLanguage()));
         return ResponseEntity.ok().build();
     }
 

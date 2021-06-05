@@ -1,4 +1,4 @@
-package com.zhuk.beautyshop.domain;
+package com.zhuk.beautyshop.domain.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

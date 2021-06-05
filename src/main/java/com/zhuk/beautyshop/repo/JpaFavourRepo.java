@@ -1,8 +1,7 @@
 package com.zhuk.beautyshop.repo;
 
-import com.zhuk.beautyshop.domain.FavourTranslation;
-import com.zhuk.beautyshop.domain.FavourCategory;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.zhuk.beautyshop.domain.entity.FavourCategory;
+import com.zhuk.beautyshop.domain.entity.FavourTranslation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,8 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Qualifier("JpaClientServiceRepo")
-public interface JpaFavourRepo extends JpaRepository<FavourTranslation, Long>, FavourRepo {
+public interface JpaFavourRepo extends JpaRepository<FavourTranslation, Long> {
     Optional<FavourTranslation> findByFavourIdAndLanguage(Long id, String language);
 
     List<FavourTranslation> findAllByLanguage(String language);

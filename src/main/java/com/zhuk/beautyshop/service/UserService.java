@@ -1,8 +1,7 @@
 package com.zhuk.beautyshop.service;
 
-import com.zhuk.beautyshop.domain.User;
+import com.zhuk.beautyshop.domain.entity.User;
 import com.zhuk.beautyshop.repo.UserRepo;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

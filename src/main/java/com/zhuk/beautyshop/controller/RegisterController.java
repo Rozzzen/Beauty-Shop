@@ -1,7 +1,7 @@
 package com.zhuk.beautyshop.controller;
 
-import com.zhuk.beautyshop.domain.User;
-import com.zhuk.beautyshop.domain.UserRole;
+import com.zhuk.beautyshop.domain.entity.User;
+import com.zhuk.beautyshop.domain.entity.UserRole;
 import com.zhuk.beautyshop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

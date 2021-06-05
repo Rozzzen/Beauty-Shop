@@ -1,10 +1,6 @@
 package com.zhuk.beautyshop.controller;
 
-import com.zhuk.beautyshop.domain.Appointment;
-import com.zhuk.beautyshop.domain.FavourCategory;
-import com.zhuk.beautyshop.domain.Master;
-import com.zhuk.beautyshop.domain.MasterRating;
-import com.zhuk.beautyshop.domain.User;
+import com.zhuk.beautyshop.domain.entity.*;
 import com.zhuk.beautyshop.service.AppointmentService;
 import com.zhuk.beautyshop.service.MasterService;
 import com.zhuk.beautyshop.service.UserService;

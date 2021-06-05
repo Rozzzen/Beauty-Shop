@@ -1,4 +1,4 @@
-package com.zhuk.beautyshop.domain;
+package com.zhuk.beautyshop.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
