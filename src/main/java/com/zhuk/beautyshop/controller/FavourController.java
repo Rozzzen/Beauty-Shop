@@ -6,6 +6,7 @@ import com.zhuk.beautyshop.dto.FavourDto;
 import com.zhuk.beautyshop.service.FavourService;
 import com.zhuk.beautyshop.service.MasterService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.metadata.TypeBuilder;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class FavourController {
 
     private final FavourService favourService;
@@ -26,7 +28,7 @@ public class FavourController {
     private final MapperFacade mapperFacade;
 
     @GetMapping(value = {"/favours", "/favours/{master}"})
-    public ResponseEntity<Map<FavourCategory, List<FavourDto>>> getServiceList(
+    public Map<FavourCategory, List<FavourTranslationModel>> getServiceList(
             @PathVariable(name = "master", required = false) Long id,
             Locale locale) {
 
@@ -38,8 +40,6 @@ public class FavourController {
             favours = favourService.findAllByMasterSpecialities(locale.getLanguage(),
                     masterService.findFirstById(id));
 
-        return ResponseEntity.ok(mapperFacade.mapAsMap(favours,
-                new TypeBuilder<Map<FavourCategory, List<FavourTranslationModel>>>(){}.build(),
-                new TypeBuilder<Map<FavourCategory, List<FavourDto>>>(){}.build()));
+        return favours;
     }
 }

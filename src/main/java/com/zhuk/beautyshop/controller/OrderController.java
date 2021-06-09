@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
@@ -42,7 +44,7 @@ public class OrderController {
     }
 
     @PatchMapping
-    public ResponseEntity<Object> getOrderForm(@RequestParam(name = "masterId", required = false) Long masterId,
+    public void getOrderForm(@RequestParam(name = "masterId", required = false) Long masterId,
                                                @RequestParam(name = "serviceId", required = false) Long serviceId,
                                                @ModelAttribute("appointment") Appointment appointment,
                                                Locale locale) {
@@ -51,11 +53,10 @@ public class OrderController {
 //                appointment.setFavourTranslation(favourService.findFirstEntityById(serviceId, locale.getLanguage()));
 //            else if (masterId != null) appointment.setMaster(masterService.findFirstById(masterId));
         }
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/services")
-    public ResponseEntity<Map<FavourCategory, List<FavourDto>>> getServices(@ModelAttribute("appointment") Appointment appointment,
+    public Map<FavourCategory, List<FavourDto>> getServices(@ModelAttribute("appointment") Appointment appointment,
                                                                             Locale locale) {
 //        if (appointment.getMaster() == null)
 //            return ResponseEntity.ok(favourService.findAllByLanguageAndCategory(locale.getLanguage()));
@@ -64,21 +65,19 @@ public class OrderController {
     }
 
     @PatchMapping("/services")
-    public ResponseEntity<Object> putService(@RequestParam(name = "serviceId") Long serviceId,
+    public void putService(@RequestParam(name = "serviceId") Long serviceId,
                                              @ModelAttribute("appointment") Appointment appointment,
                                              Locale locale) {
 //        appointment.setFavourTranslation(favourService.findFirstEntityById(serviceId, locale.getLanguage()));
-        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/services")
-    public ResponseEntity<Object> deleteService(@ModelAttribute("appointment") Appointment appointment) {
+    public void deleteService(@ModelAttribute("appointment") Appointment appointment) {
         appointment.setFavourTranslation(null);
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/masters")
-    public ResponseEntity<Page<Master>> getMasters(@ModelAttribute("appointment") Appointment appointment,
+    public Page<Master> getMasters(@ModelAttribute("appointment") Appointment appointment,
                                                    @RequestParam(defaultValue = "id") String sort,
                                                    @RequestParam(defaultValue = "0") Integer page,
                                                    Authentication authentication) {
@@ -99,69 +98,61 @@ public class OrderController {
                     .map(x -> x.getMaster().getId())
                     .collect(Collectors.toSet());
             if (favour == null)
-                return ResponseEntity.ok(masterService.findAllByIdNotIn(user, masterIdList, pageable));
+                return masterService.findAllByIdNotIn(user, masterIdList, pageable);
             else {
                 String speciality = favour.getFavour().getCategory().name().toUpperCase();
-                return ResponseEntity.ok(masterService.findAllByIdNotInAndSpecialitiesContaining(masterIdList, user, speciality, pageable));
+                return masterService.findAllByIdNotInAndSpecialitiesContaining(masterIdList, user, speciality, pageable);
             }
         } else {
             if (favour == null)
-                return ResponseEntity.ok(masterService.findAll(user, pageable));
+                return masterService.findAll(user, pageable);
             else {
                 String speciality = favour.getFavour().getCategory().name().toUpperCase();
-                return ResponseEntity.ok(masterService.findAllBySpecialitiesContaining(user, speciality, pageable));
+                return masterService.findAllBySpecialitiesContaining(user, speciality, pageable);
             }
         }
     }
 
     @PatchMapping("/masters")
-    public ResponseEntity<Object> putMaster(@RequestParam(name = "masterId") Long masterId,
+    public void putMaster(@RequestParam(name = "masterId") Long masterId,
                                             @ModelAttribute("appointment") Appointment appointment) {
         appointment.setMaster(masterService.findFirstById(masterId));
-        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/masters")
-    public ResponseEntity<Object> removeMaster(@ModelAttribute("appointment") Appointment appointment) {
+    public void removeMaster(@ModelAttribute("appointment") Appointment appointment) {
         appointment.setMaster(null);
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/timeslots")
-    public ResponseEntity<Object> getTimeSlots() {
-        return ResponseEntity.ok().build();
-    }
+    public void getTimeSlots() {}
 
     @PatchMapping("/timeslots")
-    public ResponseEntity<Object> addTimeslot(@ModelAttribute("appointment") Appointment appointment,
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addTimeslot(@ModelAttribute("appointment") Appointment appointment,
                                               LocalDateTime localDateTime) {
         appointment.setTimeslot(localDateTime);
-        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/timeslots")
-    public ResponseEntity<Object> deleteTimeslot(@ModelAttribute("appointment") Appointment appointment) {
+    public void deleteTimeslot(@ModelAttribute("appointment") Appointment appointment) {
         appointment.setTimeslot(null);
-        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/submit")
-    public ResponseEntity<Object> createForm(@ModelAttribute("appointment") Appointment appointment,
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createForm(@ModelAttribute("appointment") Appointment appointment,
                                              @Valid CreditCard creditCard,
                                              BindingResult bindingResult,
                                              SessionStatus status,
                                              Authentication authentication) {
-
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            throw new ValidationException();
         }
-
         User user = (User) authentication.getPrincipal();
         appointment.setUser(user);
         appointmentService.save(appointment);
         status.setComplete();
         mailSender.send(appointment);
-
-        return ResponseEntity.ok().build();
     }
 }

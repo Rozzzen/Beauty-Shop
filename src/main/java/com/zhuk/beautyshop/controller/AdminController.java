@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Objects;
@@ -30,25 +31,24 @@ public class AdminController {
     private final UserService userService;
 
     @GetMapping("/appointments")
-    public ResponseEntity<Page<Appointment>> getAppointmentList(Locale locale,
+    public Page<Appointment> getAppointmentList(Locale locale,
                                                               @RequestParam(defaultValue = "0") Integer page) {
-        return ResponseEntity.ok()
-                .body(appointmentService.findAllLocalised(locale.getLanguage(), PageRequest.of(page, 5)));
+        return appointmentService.findAllLocalised(locale.getLanguage(), PageRequest.of(page, 5));
     }
 
     @DeleteMapping("/appointments/{id}")
     public void deleteAppointment(@PathVariable Long id) {
         appointmentService.deleteById(id);
-        ResponseEntity.status(HttpStatus.OK);
     }
 
     @GetMapping("/master-assignment")
     public void getMasterAssignmentForm() {
-        ResponseEntity.ok().build();
+
     }
 
     @PostMapping("/master-assignment")
-    public ResponseEntity<Object> createMasterAssignment(@RequestParam("email") String email,
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createMasterAssignment(@RequestParam("email") String email,
                                                          @RequestParam(value = "hairdo", required = false) String hairdo,
                                                          @RequestParam(value = "manicure", required = false) String manicure,
                                                          @RequestParam(value = "pedicure", required = false) String pedicure,
@@ -58,27 +58,25 @@ public class AdminController {
                 Stream.of(hairdo, makeup, pedicure, manicure).filter(Objects::nonNull).map(x -> FavourCategory.valueOf(x.toUpperCase())).collect(Collectors.toSet());
 
         if (serviceCategories.isEmpty() && user == null && masterService.findByEmail(email) != null) {
-            return ResponseEntity.badRequest().build();
+            throw new ValidationException();
         }
         Master master = new Master();
         master.setUserInfo(user);
         master.setRating(new MasterRating());
         master.setSpecialities(serviceCategories);
         masterService.save(master);
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/appointments/select-timeslot/{appointmentId}")
-    public ResponseEntity<Appointment> getTimeslots(@PathVariable("appointmentId") Long id) {
-        return ResponseEntity.ok().body(appointmentService.findById(id));
+    public Appointment getTimeslots(@PathVariable("appointmentId") Long id) {
+        return appointmentService.findById(id);
     }
 
     @PutMapping("/appointments/select-timeslot")
-    public ResponseEntity<Object> updateTimeslot(@RequestParam("appointmentId") Long id,
+    public void updateTimeslot(@RequestParam("appointmentId") Long id,
                                               LocalDateTime localDateTime) {
         Appointment appointment = appointmentService.getOne(id);
         appointment.setTimeslot(localDateTime);
         appointmentService.save(appointment);
-        return ResponseEntity.ok().build();
     }
 }

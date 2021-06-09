@@ -31,7 +31,7 @@ public class MasterController {
     private final AppointmentService appointmentService;
 
     @GetMapping(value = {"/masters", "/masters/{category}"})
-    public ResponseEntity<Page<Master>> getMasterList(@RequestParam(defaultValue = "id") String sort,
+    public Page<Master> getMasterList(@RequestParam(defaultValue = "id") String sort,
                                                    @RequestParam(defaultValue = "0") Integer page,
                                                    @PathVariable(name = "category", required = false) String category,
                                                    Authentication authentication) {
@@ -44,15 +44,13 @@ public class MasterController {
         Pageable pageable = PageRequest.of(page, 3, Sort.by(sort).descending());
 
         if (category == null)
-            return ResponseEntity.ok().body(masterService.findAll(user, pageable));
-        return ResponseEntity.ok()
-                .body(masterService.findAllBySpecialitiesContaining(user, category.toUpperCase(), pageable));
+            return masterService.findAll(user, pageable);
+        return masterService.findAllBySpecialitiesContaining(user, category.toUpperCase(), pageable);
     }
 
     @GetMapping(value = {"/masters/info/{id}"})
-    public ResponseEntity<Master> getMasterDetailInformation(@PathVariable Long id) {
-        return ResponseEntity.ok()
-                .body(masterService.findFirstById(id));
+    public Master getMasterDetailInformation(@PathVariable Long id) {
+        return masterService.findFirstById(id);
     }
 
     @GetMapping("/masters/image")
@@ -73,7 +71,7 @@ public class MasterController {
 
     @GetMapping("/masters/schedule")
     @PreAuthorize("hasAuthority('MASTER')")
-    public ResponseEntity<List<Appointment>> getMasterSchedule(Authentication authentication) {
+    public List<Appointment> getMasterSchedule(Authentication authentication) {
 
         User user = (User) authentication.getPrincipal();
         Master master = masterService.getFirstByUserInfoId(user.getId());
@@ -85,7 +83,7 @@ public class MasterController {
 //            localDates.add(LocalDate.now(zoneId).plusDays(i));
 //        model.addAttribute("weak", localDates);
 
-        return ResponseEntity.ok().body(master.getAppointments());
+        return master.getAppointments();
     }
 
     @PatchMapping("/masters/schedule")

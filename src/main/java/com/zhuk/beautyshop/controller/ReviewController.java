@@ -7,11 +7,13 @@ import com.zhuk.beautyshop.service.AppointmentService;
 import com.zhuk.beautyshop.service.MasterRatingService;
 import com.zhuk.beautyshop.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 
 @RestController
 @RequestMapping("/review/{code}")
@@ -27,14 +29,15 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createForm(@PathVariable String code,
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createForm(@PathVariable String code,
                                            @Valid Review review,
                                            BindingResult bindingResult) {
 
         Appointment appointment = appointmentService.getOneByReviewCode(code);
 
         if(appointment.getIsReviewed() || bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            throw new ValidationException();
         }
         MasterRating masterRating = masterRatingService.getOne(appointment.getMaster().getRating().getId());
         Integer ratingCount = masterRating.getRatingCount();
@@ -51,7 +54,5 @@ public class ReviewController {
 
         appointment.setIsReviewed(true);
         appointmentService.save(appointment);
-
-        return ResponseEntity.ok().build();
     }
 }

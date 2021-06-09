@@ -4,14 +4,13 @@ import com.zhuk.beautyshop.domain.entity.User;
 import com.zhuk.beautyshop.domain.entity.UserRole;
 import com.zhuk.beautyshop.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 
 @RestController
 @RequestMapping("/register")
@@ -25,14 +24,14 @@ public class RegisterController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createUser(@Valid User user,
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createUser(@Valid User user,
                                              BindingResult bindingResult) {
         if (user.getPassword() != null && !user.getPassword().equals(user.getPassword2())
                 || bindingResult.hasErrors()
                 || userService.findByEmail(user.getEmail()) != null)
-            return ResponseEntity.badRequest().build();
+            throw new ValidationException();
         user.setRole(UserRole.USER);
         userService.save(user);
-        return ResponseEntity.ok().build();
     }
 }

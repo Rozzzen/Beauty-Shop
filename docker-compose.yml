@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  app:
+    image: 'beauty-shop'
+    build:
+      context: src/main
+    container_name: beauty-shop
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/beauty_shop
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQL8Dialect
+
+  db:
+    image: 'mysql:8.0.25'
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=beauty_shop
