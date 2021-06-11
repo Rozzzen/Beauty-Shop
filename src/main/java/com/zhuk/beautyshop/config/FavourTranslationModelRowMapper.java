@@ -1,4 +1,4 @@
-package com.zhuk.beautyshop.repo.mapper;
+package com.zhuk.beautyshop.config;
 
 import com.zhuk.beautyshop.domain.entity.FavourCategory;
 import com.zhuk.beautyshop.domain.model.FavourModel;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@Component
 public class FavourTranslationModelRowMapper implements RowMapper<FavourTranslationModel> {
     @Override
     public FavourTranslationModel mapRow(ResultSet rs, int rowNum) throws SQLException {

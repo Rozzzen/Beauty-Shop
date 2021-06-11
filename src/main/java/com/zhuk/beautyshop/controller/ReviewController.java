@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 
-@RestController
+@ResponseBody
 @RequestMapping("/review/{code}")
 @RequiredArgsConstructor
 public class ReviewController {

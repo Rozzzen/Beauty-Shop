@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@RestController
+@ResponseBody
 @AllArgsConstructor
 @RequestMapping("/create-order")
 @SessionAttributes(types = Appointment.class, names = {"appointment"})

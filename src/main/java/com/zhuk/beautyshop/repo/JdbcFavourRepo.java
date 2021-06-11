@@ -2,18 +2,16 @@ package com.zhuk.beautyshop.repo;
 
 import com.zhuk.beautyshop.domain.entity.FavourCategory;
 import com.zhuk.beautyshop.domain.model.FavourTranslationModel;
-import com.zhuk.beautyshop.repo.mapper.FavourTranslationModelRowMapper;
+import com.zhuk.beautyshop.config.FavourTranslationModelRowMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 @RequiredArgsConstructor
 @Qualifier("JdbcClientServiceRepo")
 public class JdbcFavourRepo implements FavourRepo {

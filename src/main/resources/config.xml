@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/jdbc
+	http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.1.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+	http://www.springframework.org/schema/data/jpa
+	http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/data/jpa
+    http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="username" value="${spring.datasource.username}"/>
+        <property name="password" value="${spring.datasource.password}"/>
+        <property name="url" value="${spring.datasource.url}"/>
+        <property name="driverClassName" value="${spring.datasource.driver-class-name}"/>
+    </bean>
+
+    <!-- Configure the entity manager factory bean -->
+    <bean id="emf"
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+        </property>
+        <!-- Set JPA properties -->
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+        <!-- Set base package of your entities -->
+        <property name="packagesToScan" value="com.zhuk.beautyshop.domain.model"/>
+        <!-- Set share cache mode -->
+        <property name="persistenceXmlLocation" value="classpath:config.xml"/>
+        <property name="persistenceUnitName" value="spring.data.jpa"/>
+    </bean>
+
+    <!-- Configure the transaction manager bean -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="emf"/>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="persistenceUnitName" value="spring.data.jpa"/>
+    </bean>
+
+    <jpa:repositories base-package="com.zhuk.beautyshop.repo"
+                      entity-manager-factory-ref="emf"
+                      transaction-manager-ref="transactionManager"/>
+
+    <!--FAVOUR REPO-->
+    <bean id="favourTranslationModelRowMapper" class="com.zhuk.beautyshop.config.FavourTranslationModelRowMapper"/>
+    <bean id="jdbcClientServiceRepo" class="com.zhuk.beautyshop.repo.JdbcFavourRepo">
+        <constructor-arg name="favourTranslationModelRowMapper" ref="favourTranslationModelRowMapper"/>
+    </bean>
+    <bean id="jpaClientServiceRepo" class="com.zhuk.beautyshop.repo.JpaFavourRepoWrapper"/>
+    <bean id="requestContext" scope="request" class="com.zhuk.beautyshop.dto.RequestContext"/>
+
+    <bean id="favourRepoStrategy" class="com.zhuk.beautyshop.repo.FavourRepoStrategy">
+        <constructor-arg name="jdbcClientServiceRepo" ref="jdbcClientServiceRepo"/>
+        <constructor-arg name="jpaFavourRepoWrapper" ref="jpaClientServiceRepo"/>
+        <constructor-arg name="requestContext" ref="requestContext"/>
+    </bean>
+
+    <!--CONFIGS-->
+    <bean id="requestHandlerInterceptor" class="com.zhuk.beautyshop.config.RequestHandlerInterceptor">
+        <constructor-arg name="requestContext" ref="requestContext"/>
+    </bean>
+
+    <!--REST OF REPOS-->
+    <bean id="appointmentRepo" class="com.zhuk.beautyshop.repo.AppointmentRepo" abstract="true"/>
+    <bean id="masterRatingRepo" class="com.zhuk.beautyshop.repo.MasterRatingRepo" abstract="true"/>
+    <bean id="masterRepo" class="com.zhuk.beautyshop.repo.MasterRepo" abstract="true"/>
+    <bean id="reviewRepo" class="com.zhuk.beautyshop.repo.ReviewRepo" abstract="true"/>
+    <bean id="userRepo" class="com.zhuk.beautyshop.repo.UserRepo" abstract="true"/>
+
+    <!--SERVICES-->
+    <bean id="appointmentService" class="com.zhuk.beautyshop.service.AppointmentService">
+        <constructor-arg name="appointmentRepo" value="appointmentRepo"/>
+    </bean>
+    <bean id="favourService" class="com.zhuk.beautyshop.service.FavourService">
+        <constructor-arg name="favourRepo" value="favourRepoStrategy"/>
+    </bean>
+    <bean id="mailSenderService" class="com.zhuk.beautyshop.service.MailSender">
+        <constructor-arg name="mailSender" ref="mailSender"/>
+    </bean>
+    <bean id="masterRatingService" class="com.zhuk.beautyshop.service.MasterRatingService">
+        <constructor-arg name="masterRatingRepo" value="masterRatingRepo"/>
+    </bean>
+    <bean id="reviewService" class="com.zhuk.beautyshop.service.ReviewService">
+        <constructor-arg name="reviewRepo" value="reviewRepo"/>
+    </bean>
+    <bean id="masterService" class="com.zhuk.beautyshop.service.MasterService">
+        <constructor-arg name="masterRepo" value="masterRepo"/>
+    </bean>
+    <bean id="userService" class="com.zhuk.beautyshop.service.UserService">
+        <constructor-arg name="userRepo" value="userRepo"/>
+    </bean>
+
+    <!--CONTROLLERS-->
+    <bean id="adminController" class="com.zhuk.beautyshop.controller.AdminController">
+        <constructor-arg name="appointmentService" ref="appointmentService"/>
+        <constructor-arg name="masterService" ref="masterService"/>
+        <constructor-arg name="userService" ref="userService"/>
+    </bean>
+    <bean id="favourController" class="com.zhuk.beautyshop.controller.FavourController">
+        <constructor-arg name="favourService" ref="favourService"/>
+        <constructor-arg name="masterService" ref="masterService"/>
+        <constructor-arg name="mapperFacade" value="ma.glasnost.orika.MapperFacade"/>
+    </bean>
+    <bean id="orderController" class="com.zhuk.beautyshop.controller.OrderController">
+        <constructor-arg name="masterService" ref="masterService"/>
+        <constructor-arg name="appointmentService" ref="appointmentService"/>
+        <constructor-arg name="favourService" ref="favourService"/>
+        <constructor-arg name="mailSender" ref="mailSenderService"/>
+    </bean>
+    <bean id="registerController" class="com.zhuk.beautyshop.controller.RegisterController">
+        <constructor-arg name="userService" ref="userService"/>
+    </bean>
+    <bean id="masterController" class="com.zhuk.beautyshop.controller.MasterController">
+        <constructor-arg name="masterService" ref="masterService"/>
+        <constructor-arg name="appointmentService" ref="appointmentService"/>
+    </bean>
+    <bean id="reviewController" class="com.zhuk.beautyshop.controller.ReviewController">
+        <constructor-arg name="appointmentService" ref="appointmentService"/>
+        <constructor-arg name="masterRatingService" ref="masterRatingService"/>
+        <constructor-arg name="reviewService" ref="reviewService"/>
+    </bean>
+
+</beans>

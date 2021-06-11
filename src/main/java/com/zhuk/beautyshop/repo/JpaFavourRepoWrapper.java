@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 @RequiredArgsConstructor
 @Qualifier("JpaClientServiceRepo")
 public class JpaFavourRepoWrapper implements FavourRepo{

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.Optional;
 
-@Repository
 public interface MasterRepo extends JpaRepository<Master, Long> {
 
     Page<Master> findAll(Pageable pageable);

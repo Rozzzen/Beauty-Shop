@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@RestController
+@ResponseBody
 @PreAuthorize("hasAuthority('ADMIN')")
 @RequestMapping("/admin")
 @AllArgsConstructor
